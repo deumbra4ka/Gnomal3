@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Печера Буйних</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            background: #000;
+        }
+
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            opacity: 0.9;
+        }
+
+        .portal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            animation: fadeOutOverlay 6s ease forwards;
+        }
+
+        .portal {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #ff0000, #ff4500, #000);
+            border-radius: 50%;
+            box-shadow: 0 0 40px #ff0000, 0 0 80px #ff4500, 0 0 120px #000;
+            animation: portalExpand 5s ease forwards, portalGlitch 0.15s infinite, portalPulse 1.2s infinite;
+            transform: scale(0);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent, rgba(255, 69, 0, 0.6));
+            animation: portalSpark 1.5s infinite;
+        }
+
+        @keyframes portalExpand {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(25); opacity: 1; }
+            100% { transform: scale(35); opacity: 0; }
+        }
+
+        @keyframes portalGlitch {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(3px, -3px); }
+            100% { transform: translate(-3px, 3px); }
+        }
+
+        @keyframes portalPulse {
+            0% { box-shadow: 0 0 40px #ff0000, 0 0 80px #ff4500; }
+            50% { box-shadow: 0 0 60px #ff0000, 0 0 100px #ff4500; }
+            100% { box-shadow: 0 0 40px #ff0000, 0 0 80px #ff4500; }
+        }
+
+        @keyframes portalSpark {
+            0% { opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes fadeOutOverlay {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        header {
+            background: url('https://via.placeholder.com/1920x400?text=ПСИХУШКА+ДЛЯ+ГНОМІВ') center/cover;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            animation: headerGlow 2s infinite;
+            border-bottom: 10px solid #ffff00;
+            box-shadow: inset 0 0 50px #000;
+            z-index: 10;
+        }
+
+        @keyframes headerGlow {
+            0% { box-shadow: inset 0 0 40px #ff0000, 0 0 40px #ffff00; }
+            50% { box-shadow: inset 0 0 80px #000, 0 0 80px #ff0000; }
+            100% { box-shadow: inset 0 0 40px #ff0000, 0 0 40px #ffff00; }
+        }
+
+        h1 {
+            font-size: 8em;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff4500;
+            margin: 0;
+            line-height: 1;
+            position: relative;
+        }
+
+        .offer {
+            background: #ffff00;
+            color: #ff0000;
+            padding: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 0 30px #000;
+            border: 3px dashed #ff0000;
+            transition: transform 0.3s;
+            animation: pulse 0.6s infinite, glitch 0.3s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shine 2s infinite;
+        }
+
+        .offer:hover {
+            transform: scale(1.15);
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .nav-menu {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav-menu a, .redirect-btn {
+            background: #ff0000;
+            color: #ffff00;
+            padding: 10px 20px;
+            font-size: 1.5em;
+            text-decoration: none;
+            border-radius: 10px;
+            border: 2px solid #ffff00;
+            box-shadow: 0 0 15px #000;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before, .redirect-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .nav-menu a:hover::before, .redirect-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-menu a:hover, .redirect-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 30px #ffff00;
+            animation: pulse 0.6s infinite;
+        }
+
+        .section {
+            min-height: 65vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            margin-bottom: 5px;
+            border: 5px solid #666;
+            box-shadow: inset 0 0 30px #000;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            animation: fog 12s infinite;
+        }
+
+        @keyframes fog {
+            0% { background: rgba(0, 0, 0, 0.7); }
+            50% { background: rgba(50, 0, 0, 0.8); }
+            100% { background: rgba(0, 0, 0, 0.7); }
+        }
+
+        .water {
+            background: url('https://via.placeholder.com/1920x1080?text=ВОДА+ВИКЛИК') center/cover;
+            animation: slideIn 0.7s ease-out;
+        }
+
+        .bread {
+            background: url('https://via.placeholder.com/1920x1080?text=СУХАРІ+ВИКЛИК') center/cover;
+            animation: slideIn 0.7s ease-out 0.2s;
+        }
+
+        .games {
+            background: url('https://via.placeholder.com/1920x1080?text=ІГРИ+ВИКЛИК') center/cover;
+            animation: slideIn 0.7s ease-out 0.4s;
+        }
+
+        .patients, .staff, .rooms {
+            background: url('https://via.placeholder.com/1920x1080?text=ГАЛЕРЕЯ+ПАЦІЄНТІВ') center/cover;
+            animation: slideIn 0.7s ease-out 0.5s;
+            min-height: auto;
+            padding: 40px 15px;
+        }
+
+        .staff {
+            background: url('https://via.placeholder.com/1920x1080?text=НАШ+ПЕРСОНАЛ') center/cover;
+            animation: slideIn 0.7s ease-out 0.6s;
+        }
+
+        .rooms {
+            background: url('https://via.placeholder.com/1920x1080?text=КІМНАТИ+ГНОМІВ') center/cover;
+            animation: slideIn 0.7s ease-out 0.7s;
+        }
+
+        .patient-gallery, .staff-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .patient-card, .staff-card {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid #ffff00;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #000;
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            animation: emerge 1.2s ease-out;
+            cursor: pointer;
+        }
+
+        .staff-card {
+            border: 3px solid #00ff00;
+        }
+
+        .patient-card:hover, .staff-card:hover {
+            transform: scale(1.15) translateZ(30px);
+            box-shadow: 0 0 40px #ff0000, 0 0 60px #ffff00;
+            animation: glitch 0.3s infinite;
+        }
+
+        @keyframes emerge {
+            0% { transform: translateY(150px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .patient-name, .staff-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffff00;
+            font-size: 1.5em;
+            text-align: center;
+            padding: 10px;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .staff-name {
+            color: #00ff00;
+        }
+
+        .patient-card:hover .patient-name, .staff-card:hover .staff-name {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-info {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffff00;
+            padding: 20px;
+            border: 3px solid #ff0000;
+            border-radius: 10px;
+            max-width: 500px;
+            z-index: 2000;
+            animation: cardPop 0.5s ease-out;
+        }
+
+        @keyframes cardPop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .rooms h2 {
+            font-size: 3.5em;
+            text-shadow: 0 0 30px #ff0000, 0 0 40px #ffff00;
+            animation: glow 1s infinite;
+            margin-bottom: 40px;
+        }
+
+        .room-container {
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            max-width: 1000px;
+            width: 90%;
+            margin-left: 15%;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 3px dashed #666;
+            box-shadow: 0 0 30px #000;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .room-container.basic {
+            border-color: #666;
+            animation: flicker 0.5s infinite;
+        }
+
+        .room-container.medium {
+            border-color: #ffff00;
+            animation: shake 0.3s infinite;
+        }
+
+        .room-container.vip {
+            border-color: #ff0000;
+            animation: pulse 0.6s infinite;
+        }
+
+        .room-container.platinum {
+            border-color: #0000ff;
+            animation: flash 1s infinite;
+        }
+
+        .room-container:hover {
+            transform: scale(1.1) translateZ(30px);
+            box-shadow: 0 0 40px #ff0000;
+            animation: glitch 0.3s infinite;
+        }
+
+        .room-image {
+            width: 300px;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px #000;
+            position: relative;
+            animation: spark 2s infinite;
+        }
+
+        .room-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent, rgba(255, 0, 0, 0.4));
+            animation: sparkOverlay 3s infinite;
+        }
+
+        @keyframes spark {
+            0% { box-shadow: 0 0 20px #000; }
+            50% { box-shadow: 0 0 30px #ff0000; }
+            100% { box-shadow: 0 0 20px #000; }
+        }
+
+        @keyframes sparkOverlay {
+            0% { opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0; }
+        }
+
+        .room-details {
+            flex: 1;
+            color: #fff;
+        }
+
+        .room-details h3 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px #000;
+            animation: textGlow 2s infinite;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 15px #000; }
+            50% { text-shadow: 0 0 25px #ff0000; }
+            100% { text-shadow: 0 0 15px #000; }
+        }
+
+        .room-details.basic h3 { color: #666; }
+        .room-details.medium h3 { color: #ffff00; }
+        .room-details.vip h3 { color: #ff0000; }
+        .room-details.platinum h3 { color: #0000ff; }
+
+        .room-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .room-details ul li {
+            font-size: 1.2em;
+            margin: 5px 0;
+        }
+
+        .room-details ul li i {
+            margin-right: 10px;
+            animation: jitter 0.2s infinite, spin 2s infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .room-details p {
+            font-size: 1.5em;
+            margin-top: 10px;
+            color: #ffff00;
+            text-shadow: 0 0 5px #000;
+            animation: pulse 1s infinite;
+        }
+
+        .form-section {
+            background: url('https://via.placeholder.com/1920x1080?text=РЕЄСТРАЦІЯ+В+ПСИХУШКУ') center/cover;
+            animation: slideIn 0.7s ease-out 0.7s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .section h2 {
+            font-size: 2.8em;
+            text-shadow: 0 0 20px #000;
+            animation: glow 1s infinite, bloodDrip 3s infinite;
+        }
+
+        .section p {
+            font-size: 1.4em;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin: 10px;
+            animation: fadeIn 1s infinite;
+            border: 2px dashed #ffff00;
+            max-width: 600px;
+        }
+
+        @keyframes fadeIn {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .section i {
+            font-size: 2.8em;
+            animation: jitter 0.2s infinite, glow 1s infinite;
+        }
+
+        .form-section {
+            min-height: 65vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 5px solid #666;
+        }
+
+        .form-section input {
+            padding: 15px;
+            margin: 8px;
+            width: 300px;
+            border: 2px solid #ffff00;
+            border-radius: 8px;
+            font-size: 1.2em;
+            background: #fff;
+            box-shadow: 0 0 20px #ff0000;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .form-section input:focus {
+            animation: shakeInput 0.1s infinite, burn 1s infinite;
+            box-shadow: 0 0 30px #ff0000, 0 0 40px #ffff00;
+        }
+
+        @keyframes shakeInput {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(-3px); }
+            100% { transform: translateX(3px); }
+        }
+
+        @keyframes burn {
+            0% { border-color: #ffff00; }
+            50% { border-color: #ff0000; }
+            100% { border-color: #ffff00; }
+        }
+
+        .submit-btn, .game-btn {
+            background: #ffff00;
+            color: #ff0000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.6em;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 0 30px #000;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .submit-btn::before, .game-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.6), transparent);
+            transition: 0.5s;
+        }
+
+        .submit-btn:hover::before, .game-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover, .game-btn:hover {
+            animation: pulse 0.5s infinite;
+            box-shadow: 0 0 40px #ff0000;
+        }
+
+        .counter {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #ffff00;
+            color: #ff0000;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            box-shadow: 0 0 20px #000;
+            animation: wobble 1s infinite, counterPulse 1.5s infinite;
+            border: 2px solid #ff0000;
+            z-index: 2000;
+        }
+
+        .counter span {
+            animation: digital 0.5s infinite;
+        }
+
+        @keyframes digital {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .gnome-float {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 4em;
+            cursor: pointer;
+            z-index: 2000;
+            animation: float 2s infinite ease-in-out, glow 1s infinite;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ffff00;
+            color: #ff0000;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.8em;
+            box-shadow: 0 0 20px #000;
+            animation: pulse 0.7s infinite;
+            z-index: 2000;
+        }
+
+        footer {
+            background: #333;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            border-top: 5px solid #ffff00;
+            position: relative;
+            z-index: 10;
+        }
+
+        footer i {
+            color: #ffff00;
+            animation: heartBeat 0.5s infinite;
+        }
+
+        .screamer {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 671px;
+            height: 969px;
+            border: 5px solid #ff0000;
+            box-shadow: 0 0 40px #000;
+            z-index: 3000;
+            animation: screamerPop 0.5s ease-in-out, shake 0.1s infinite;
+        }
+
+        .screamer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .screamer-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2999;
+        }
+
+        @keyframes screamerPop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .ripple {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 0, 0, 0.6);
+            border-radius: 50%;
+            animation: ripple 1s ease-out;
+            z-index: 10;
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(12); opacity: 0; }
+        }
+
+        .mini-game {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 4000;
+        }
+
+        .mini-game h2 {
+            font-size: 3em;
+            color: #ffff00;
+            text-shadow: 0 0 20px #ff0000;
+        }
+
+        .mini-game-canvas {
+            width: 800px;
+            height: 600px;
+            border: 3px solid #ff0000;
+            background: #111;
+        }
+
+        #game-ui {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 800px;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ff0000;
+        }
+
+        #score-display, #time-display {
+            font-size: 1.5em;
+            color: #ffff00;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        #high-scores {
+            color: #ffff00;
+            font-size: 1.2em;
+        }
+
+        #high-scores h3 {
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        #high-score-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        #high-score-list li {
+            margin: 5px 0;
+            animation: pulse 1s infinite;
+        }
+
+        .map-section {
+            min-height: 65vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            margin-bottom: 5px;
+            border: 5px solid #666;
+            box-shadow: inset 0 0 30px #000;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            animation: fog 12s infinite;
+        }
+
+        .map-container {
+            max-width: 800px;
+            width: 90%;
+            border: 3px solid #ffff00;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #ff0000;
+            overflow: hidden;
+            animation: pulse 0.6s infinite;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 4em;
+            }
+
+            .nav-menu a, .redirect-btn {
+                font-size: 1.2em;
+                padding: 8px 15px;
+            }
+
+            .section h2 {
+                font-size: 2em;
+            }
+
+            .room-container {
+                flex-direction: column;
+                max-width: 95%;
+                width: 95%;
+                margin-left: 5%;
+                padding: 15px;
+            }
+
+            .room-image {
+                width: 100%;
+                height: 150px;
+            }
+
+            .room-details h3 {
+                font-size: 1.5em;
+            }
+
+            .room-details ul li {
+                font-size: 1em;
+            }
+
+            .room-details p {
+                font-size: 1.2em;
+            }
+
+            .form-section input {
+                width: 90%;
+            }
+
+            .mini-game-canvas {
+                width: 100%;
+                height: 400px;
+            }
+
+            .game-btn {
+                font-size: 1.2em;
+                padding: 10px 30px;
+            }
+
+            #game-ui {
+                width: 100%;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            #score-display, #time-display {
+                font-size: 1.2em;
+            }
+
+            #high-scores {
+                font-size: 1em;
+            }
+
+            .map-container {
+                width: 95%;
+            }
+
+            .map-container iframe {
+                height: 300px;
+            }
+
+            .map-section h2 {
+                font-size: 2em;
+            }
+
+            .screamer {
+                width: 90%;
+                height: auto;
+                max-width: 671px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <div class="portal-overlay">
+        <div class="portal"></div>
+    </div>
+    <div class="screamer-overlay" id="screamer-overlay"></div>
+    <div class="music-toggle" id="music-toggle"><i class="fas fa-music"></i></div>
+    <header data-aos="fade-down">
+        <h1>Печера Буйних</h1>
+        <div class="offer" data-aos="zoom-in">Запишись в наш дурдом на все життя за <span style="color: #ff0000;">399 грн</span>!</div>
+        <div class="nav-menu" data-aos="fade-up">
+            <a href="#water">Вода</a>
+            <a href="#bread">Сухарі</a>
+            <a href="#games">Ігри</a>
+            <a href="#patients">Пацієнти</a>
+            <a href="#staff">Персонал</a>
+            <a href="#rooms">Кімнати</a>
+            <a href="#form">Реєстрація</a>
+            <a href="#mini-game">Міні-гра</a>
+            <a href="#map">Де нас знайти?</a>
+        </div>
+        <a href="index.html" class="redirect-btn" data-aos="fade-up" data-aos-delay="100">наш магазин</a>
+        <a href="index2.html" class="redirect-btn" data-aos="fade-up" data-aos-delay="200">наш ресторан</a>
+    </header>
+    <div class="counter" data-aos="zoom-in">
+        Записалось в наш дружній дім: <span id="gnome-counter"></span>
+    </div>
+    <div class="gnome-float" id="gnome-float" data-aos="fade-up"><i class="fas fa-skull"></i></div>
+    <div class="screamer" id="screamer">
+        <img src="https://sun9-28.userapi.com/impg/IDce37QaItC1tnfi1bioGhmfZB1rNUA9TVspUw/tKxR8jswWSE.jpg?size=671x969&quality=96&sign=12031db81d6b2629a5c274a9cb3c9d96&type=album" alt="Screamer image" width="671" height="969">
+    </div>
+    <div class="section water" id="water" data-aos="fade-up">
+        <h2><i class="fas fa-tint"></i> Вода для твого духу</h2>
+        <p>Готовий битися за ковток? У наших палатах іржавий кран видає воду лише найхитрішим гномам! Пробийся через натовп, обійди конкурентів і забери свою порцію. Слабаки п’ють із калюж!</p>
+    </div>
+    <div class="section bread" id="bread" data-aos="fade-up" data-aos-delay="100">
+        <h2><i class="fas fa-bread-slice"></i> Сухарі для бороди</h2>
+        <p>Сухарі – гордість гнома! У психушці ти маєш вихопити черствий шматок із рук інших бороданів. Кидайся в бійку, хапай швидше, адже лише найспритніші наситять свою бороду! Голодним тут не місце!</p>
+    </div>
+    <div class="section games" id="games" data-aos="fade-up" data-aos-delay="200">
+        <h2><i class="fas fa-trophy"></i> Ігри на нервах</h2>
+        <p>
+            <strong>"Виживи!"</strong> – це арена, де гноми перевіряють свої нерви! У темній палаті з миготливим світлом ти бігаєш, ухиляєшся від пасток і виштовхуєш суперників, щоб дістатися до бочки з водою. Переможець забирає подвійну порцію, а невдахи лижуть стіни!<br>
+            <strong>"Лови хліб!"</strong> – справжній хаос! Сухарі падають із стелі, а ти з десятком гномів стрибаєш, штовхаєшся і хапаєш їх у польоті. Збери більше всіх, і твоя борода стане легендою! Але обережно – один промах, і ти без вечері!
+        </p>
+    </div>
+    <div class="section patients" id="patients" data-aos="fade-up">
+        <h2><i class="fas fa-users"></i> Галерея послушних пацієнтів</h2>
+        <div class="patient-gallery">
+            <div class="patient-card" style="background-image: url('https://cdn.mos.cms.futurecdn.net/GsnyJQ3bh2gcsuLchip5HU-1200-80.jpg')" aria-label="Шизо-Борода" data-aos="zoom-in" data-info="Шизо-Борода: Легенда психушки, вважає, що його борода керує світом.">
+                <div class="patient-name">Шизо-Борода</div>
+            </div>
+            <div class="patient-card" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/6/69/Gustavo_Fring_BCS_S3E10.png')" aria-label="Гном шеф Повар" data-aos="zoom-in" data-aos-delay="100" data-info="Гном шеф Повар: Готує сухарі з магічною точністю, але іноді додає 'сюрпризи'.">
+                <div class="patient-name">Гном шеф Повар</div>
+            </div>
+            <div class="patient-card" style="background-image: url('https://upload.wikimedia.org/wikipedia/ru/a/ac/Walter_Hartwell_White.jpg')" aria-label="Помічник повара" data-aos="zoom-in" data-aos-delay="200" data-info="Помічник повара: Мріє стати шефом, але постійно втрачає сухарі.">
+                <div class="patient-name">Помічник повара</div>
+            </div>
+        </div>
+    </div>
+    <div class="section staff" id="staff" data-aos="fade-up">
+        <h2><i class="fas fa-user-md"></i> Наш персонал</h2>
+        <div class="staff-gallery">
+            <div class="staff-card" style="background-image: url('https://avatars.mds.yandex.net/get-ott/212840/2a0000016b94647cff0c079b6516bdcb1572/672x378')" aria-label="Доктор Хаус" data-aos="zoom-in" data-info="Доктор Хаус: Діагностує гномів за запахом бороди.">
+                <div class="staff-name">Доктор Хаус</div>
+            </div>
+            <div class="staff-card" style="background-image: url('https://i.pinimg.com/736x/a5/29/9a/a5299ad9d7c220be50951d4c1b09afdf.jpg')" aria-label="Медсестра Світлана" data-aos="zoom-in" data-aos-delay="100" data-info="Медсестра Світлана: Її уколи лякають навіть найсміливіших гномів.">
+                <div class="staff-name">Медсестра Світлана</div>
+            </div>
+            <div class="staff-card" style="background-image: url('https://sun9-28.userapi.com/impg/IDce37QaItC1tnfi1bioGhmfZB1rNUA9TVspUw/tKxR8jswWSE.jpg?size=671x969&quality=96&sign=12031db81d6b2629a5c274a9cb3c9d96&type=album')" aria-label="Ерік Форман" data-aos="zoom-in" data-aos-delay="200" data-info="Ерік Форман: Стажер, який завжди плутає ліки.">
+                <div class="staff-name">Ерік Форман</div>
+            </div>
+            <div class="staff-card" style="background-image: url('https://i.pinimg.com/736x/f6/1f/8b/f61f8be971bfe32232dcca2d89a30e09.jpg')" aria-label="Крутий хлопець" data-aos="zoom-in" data-aos-delay="300" data-info="Крутий хлопець: Охоронець, який любить розповідати байки.">
+                <div class="staff-name">Крутий хлопець</div>
+            </div>
+        </div>
+    </div>
+    <div class="section rooms" id="rooms" data-aos="fade-up">
+        <h2><i class="fas fa-bed"></i> Кімнати для гномів</h2>
+        <div class="room-container basic" style="animation-delay: 0.1s;" data-aos="fade-up">
+            <div class="room-image" style="background-image: url('https://s.rfi.fr/media/display/34285f3a-f1be-11ee-8380-005056bfb2b6/w:980/p:16x9/AP24057667216514.jpg')"></div>
+            <div class="room-details basic">
+                <h3>Звичайна кімната</h3>
+                <ul>
+                    <li><i class="fas fa-bed"></i> Дерев’яна лава</li>
+                    <li><i class="fas fa-tint"></i> Іржавий кран</li>
+                    <li><i class="fas fa-lightbulb"></i> Лампочка, що миготить</li>
+                </ul>
+                <p>Ціна: 100 грн/міс</p>
+            </div>
+        </div>
+        <div class="room-container medium" style="animation-delay: 0.2s;" data-aos="fade-up" data-aos-delay="100">
+            <div class="room-image" style="background-image: url('https://media.istockphoto.com/id/514441317/ru/%D1%84%D0%BE%D1%82%D0%BE/%D1%81%D1%82%D0%B0%D1%80%D1%8B%D0%B9-%D1%82%D1%8E%D1%80%D1%8C%D0%BC%D0%B5-%D0%BA%D1%80%D0%BE%D0%B2%D0%B0%D1%82%D1%8C.jpg?s=170667a&w=0&k=20&c=neeNWimn0dBnAn0nQqm3QD_uXeEZWdPXjPEmRc6n5vM=')"></div>
+            <div class="room-details medium">
+                <h3>Середня кімната</h3>
+                <ul>
+                    <li><i class="fas fa-bed"></i> Матрац із соломи</li>
+                    <li><i class="fas fa-tint"></i> Фільтр для води</li>
+                    <li><i class="fas fa-utensils"></i> Сухарі раз на тиждень</li>
+                    <li><i class="fas fa-lightbulb"></i> Стабільне світло</li>
+                </ul>
+                <p>Ціна: 500 грн/міс</p>
+            </div>
+        </div>
+        <div class="room-container vip" style="animation-delay: 0.3s;" data-aos="fade-up" data-aos-delay="200">
+            <div class="room-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_gVZ2Omcq3K1IT4s607wnt2_qeSvlhiffIg&s')"></div>
+            <div class="room-details vip">
+                <h3>VIP кімната</h3>
+                <ul>
+                    <li><i class="fas fa-bed"></i> М’яке ліжко</li>
+                    <li><i class="fas fa-tv"></i> Телевізор із 3 каналами</li>
+                    <li><i class="fas fa-utensils"></i> Щоденні сухарі + суп</li>
+                    <li><i class="fas fa-bath"></i> Душ раз на тиждень</li>
+                </ul>
+                <p>Ціна: 2000 грн/міс</p>
+            </div>
+        </div>
+        <div class="room-container platinum" style="animation-delay: 0.4s;" data-aos="fade-up" data-aos-delay="300">
+            <div class="room-image" style="background-image: url('https://pohcdn.com/sites/default/files/styles/paragraph__text_with_image___twi_image/public/2020-04/abu-dhabi-emirates-palace-palace-suite-majlis_0.jpg')"></div>
+            <div class="room-details platinum">
+                <h3>Платинова кімната</h3>
+                <ul>
+                    <li><i class="fas fa-bed"></i> Королівське ліжко</li>
+                    <li><i class="fas fa-shield-alt"></i> Особиста охорона</li>
+                    <li><i class="fas fa-wifi"></i> Wi-Fi (1 Мб/с)</li>
+                    <li><i class="fas fa-utensils"></i> Меню від шеф-повара</li>
+                    <li><i class="fas fa-bath"></i> Щоденна ванна</li>
+                </ul>
+                <p>Ціна: 10000 грн/міс</p>
+            </div>
+        </div>
+    </div>
+    <div class="section form-section" id="form" data-aos="fade-up">
+        <h2>Стань гномом психушки!</h2>
+        <form id="signup-form" onsubmit="return validateForm(event)" data-aos="zoom-in">
+            <input type="text" id="name" placeholder="Твоє гном’яче ім’я" required>
+            <input type="email" id="email" placeholder="Твій email" required>
+            <button type="submit" class="submit-btn">У психушку!</button>
+        </form>
+    </div>
+    <div class="section map-section" id="map" data-aos="fade-up">
+        <h2><i class="fas fa-map-marker-alt"></i> Де нас знайти?</h2>
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d410.53583396202106!2d-73.93027526943125!3d40.78935428861249!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f5f93d2ada7d%3A0xc400e1d325f9e960!2z0JzQsNC90YXRjdGC0YLQtdC9INCf0YHQuNGH0LjQsNGC0YDQuNC6INCh0LXQvdGC0LXRgA!5e1!3m2!1sru!2spl!4v1746973646347!5m2!1sru!2spl" 
+                width="600" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+    <div class="mini-game" id="mini-game" data-aos="fade-up">
+        <h2>Лови Сухарі!</h2>
+        <div id="game-ui">
+            <div id="score-display">Сухарі: <span id="score">0</span></div>
+            <div id="time-display">Час: <span id="time">60</span>с</div>
+            <button class="game-btn" id="start-game-btn">Хопай Сухарі</button>
+            <div id="high-scores">
+                <h3>Рекорди</h3>
+                <ul id="high-score-list"></ul>
+            </div>
+        </div>
+        <canvas class="mini-game-canvas" id="mini-game-canvas"></canvas>
+    </div>
+    <div class="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" data-aos="fade-up">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    <footer data-aos="fade-up">
+        <p>Психушка для гномів – місце, де гноми стають легендами! <i class="fas fa-heart"></i></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            AOS.init({
+                duration: 1200,
+                offset: 200,
+                once: true
+            });
+
+            const portalOverlay = document.querySelector('.portal-overlay');
+            const portalSound = new Audio('https://www.myinstants.com/media/sounds/portal_open.mp3');
+            portalSound.play().catch(err => console.error('Помилка відтворення звуку порталу:', err));
+            setTimeout(() => {
+                portalOverlay.style.display = 'none';
+            }, 6000);
+
+            const backgroundMusic = new Audio('https://www.myinstants.com/media/sounds/creepy-ambient.mp3');
+            backgroundMusic.loop = true;
+            backgroundMusic.volume = 0.3;
+            const musicToggle = document.getElementById('music-toggle');
+            let isMusicPlaying = false;
+
+            musicToggle.addEventListener('click', () => {
+                if (isMusicPlaying) {
+                    backgroundMusic.pause();
+                    musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+                    isMusicPlaying = false;
+                } else {
+                    backgroundMusic.play().catch(err => console.error('Помилка відтворення музики:', err));
+                    musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+                    isMusicPlaying = true;
+                }
+            });
+
+            const counter = document.getElementById('gnome-counter');
+            const randomGnomeCount = Math.floor(Math.random() * (2000 - 500 + 1)) + 500;
+            counter.textContent = randomGnomeCount;
+
+            function validateForm(event) {
+                event.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (name.length < 2) {
+                    alert('Ім’я закоротке, гноме!');
+                    return false;
+                }
+                if (!emailRegex.test(email)) {
+                    alert('Email не гном’ячий!');
+                    return false;
+                }
+
+                alert(`Вітаємо, ${name}! Ти в ПСИХУШЦІ!`);
+                document.getElementById('signup-form').reset();
+                counter.textContent = parseInt(counter.textContent) + 1;
+                return false;
+            }
+
+            document.querySelectorAll('.nav-menu a').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('href').substring(1);
+                    const section = document.getElementById(sectionId);
+                    section.scrollIntoView({ behavior: 'smooth' });
+                    if (sectionId === 'mini-game') {
+                        console.log('Открытие мини-игры');
+                        const miniGame = document.querySelector('.mini-game');
+                        if (miniGame) {
+                            miniGame.style.display = 'flex';
+                        } else {
+                            console.error('Элемент .mini-game не найден');
+                        }
+                    } else {
+                        const miniGame = document.querySelector('.mini-game');
+                        if (miniGame) {
+                            miniGame.style.display = 'none';
+                        }
+                    }
+                });
+            });
+
+            const gnomeFloat = document.getElementById('gnome-float');
+            const screamer = document.getElementById('screamer');
+            const screamerOverlay = document.getElementById('screamer-overlay');
+            const screamSound = new Audio('https://www.myinstants.com/media/sounds/scream_2.mp3');
+            let isScreamerActive = false;
+
+            screamSound.onerror = () => {
+                console.error('Помилка завантаження звуку скримера');
+            };
+
+            gnomeFloat.addEventListener('click', () => {
+                if (isScreamerActive) return;
+                isScreamerActive = true;
+                screamerOverlay.style.display = 'block';
+                screamer.style.display = 'block';
+                screamSound.play().catch(err => {
+                    console.error('Помилка відтворення звуку:', err);
+                    setTimeout(() => {
+                        screamer.style.display = 'none';
+                        screamerOverlay.style.display = 'none';
+                        isScreamerActive = false;
+                    }, 4000);
+                });
+                setTimeout(() => {
+                    screamer.style.display = 'none';
+                    screamerOverlay.style.display = 'none';
+                    isScreamerActive = false;
+                }, 4000);
+            });
+
+            document.querySelectorAll('.patient-card, .staff-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const info = card.getAttribute('data-info');
+                    const infoPopup = document.createElement('div');
+                    infoPopup.classList.add('card-info');
+                    infoPopup.innerHTML = `<p>${info}</p><button onclick="this.parentElement.remove()">Закрити</button>`;
+                    document.body.appendChild(infoPopup);
+                    setTimeout(() => infoPopup.style.display = 'block', 10);
+
+                    const rect = card.getBoundingClientRect();
+                    for (let i = 0; i < 20; i++) {
+                        const particle = document.createElement('div');
+                        particle.classList.add('particle');
+                        particle.style.left = rect.left + rect.width / 2 + 'px';
+                        particle.style.top = rect.top + rect.height / 2 + 'px';
+                        particle.style.background = Math.random() > 0.5 ? '#ff0000' : '#ffff00';
+                        particle.style.animation = `explodeParticle ${Math.random() * 1 + 0.5}s ease-out`;
+                        document.body.appendChild(particle);
+                        setTimeout(() => particle.remove(), 1500);
+                    }
+                });
+            });
+
+            const particleStyle = document.createElement('style');
+            particleStyle.innerText = `
+                @keyframes explodeParticle {
+                    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+                    100% { transform: translate(${(Math.random() - 0.5) * 200}px, ${(Math.random() - 0.5) * 200}px) scale(0); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(particleStyle);
+
+            document.addEventListener('click', (e) => {
+                const ripple = document.createElement('div');
+                ripple.classList.add('ripple');
+                ripple.style.left = e.clientX + 'px';
+                ripple.style.top = e.clientY + 'px';
+                document.body.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 1000);
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                document.querySelectorAll('.patient-card, .staff-card, .room-container').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const angleX = (e.clientY - centerY) / 1000;
+                    const angleY = (e.clientX - centerX) / 1000;
+                    el.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1)`;
+                });
+            });
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const tetrahedronGeometry = new THREE.TetrahedronGeometry(8);
+            const tetrahedronMaterial = new THREE.MeshStandardMaterial({
+                color: 0xff0000,
+                emissive: 0xff3333,
+                emissiveIntensity: 0.7,
+                roughness: 0.4,
+                metalness: 0.6
+            });
+            const tetrahedron = new THREE.Mesh(tetrahedronGeometry, tetrahedronMaterial);
+            scene.add(tetrahedron);
+
+            const pillGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.2, 32, 1, false);
+            const pillMaterial = new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                emissive: 0xcccccc,
+                emissiveIntensity: 0.3,
+                roughness: 0.2,
+                metalness: 0.1,
+                side: THREE.DoubleSide
+            });
+
+            const scoreGeometry = new THREE.BoxGeometry(0.6, 0.05, 0.05);
+            const scoreMaterial = new THREE.MeshStandardMaterial({
+                color: 0x999999,
+                roughness: 0.5,
+                metalness: 0.2
+            });
+
+            const pills = [];
+            function createPill() {
+                const pillGroup = new THREE.Group();
+                const pill = new THREE.Mesh(pillGeometry, pillMaterial);
+                const score = new THREE.Mesh(scoreGeometry, scoreMaterial);
+                score.position.set(0, 0.11, 0);
+                pillGroup.add(pill);
+                pillGroup.add(score);
+                const colors = [0xffffff, 0xffffcc, 0xccffff];
+                pillMaterial.color.setHex(colors[Math.floor(Math.random() * colors.length)]);
+                pillGroup.position.set(
+                    (Math.random() - 0.5) * 40,
+                    20 + Math.random() * 10,
+                    (Math.random() - 0.5) * 20
+                );
+                pillGroup.rotation.set(
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI
+                );
+                pillGroup.userData = {
+                    velocity: new THREE.Vector3(0, -0.1 - Math.random() * 0.05, 0),
+                    rotationSpeed: new THREE.Vector3(
+                        (Math.random() - 0.5) * 0.05,
+                        (Math.random() - 0.5) * 0.05,
+                        (Math.random() - 0.5) * 0.05
+                    )
+                };
+                scene.add(pillGroup);
+                pills.push(pillGroup);
+            }
+
+            const pointLight = new THREE.PointLight(0xff6666, 1.5, 100);
+            pointLight.position.set(20, 20, 20);
+            scene.add(pointLight);
+            const ambientLight = new THREE.AmbientLight(0x660000, 0.6);
+            scene.add(ambientLight);
+            camera.position.z = 20;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                tetrahedron.rotation.x += 0.01;
+                tetrahedron.rotation.y += 0.01;
+                tetrahedron.rotation.z += 0.005;
+                pills.forEach((pillGroup, index) => {
+                    pillGroup.position.add(pillGroup.userData.velocity);
+                    pillGroup.rotation.x += pillGroup.userData.rotationSpeed.x;
+                    pillGroup.rotation.y += pillGroup.userData.rotationSpeed.y;
+                    pillGroup.rotation.z += pillGroup.userData.rotationSpeed.z;
+                    if (pillGroup.position.y < -20) {
+                        scene.remove(pillGroup);
+                        pills.splice(index, 1);
+                    }
+                });
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            setInterval(createPill, 200);
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 0.15;
+                const y = (e.clientY / window.innerHeight - 0.5) * 0.15;
+                camera.position.x = x * 15;
+                camera.position.y = -y * 15;
+            });
+
+            const miniGameCanvas = document.getElementById('mini-game-canvas');
+            const ctx = miniGameCanvas.getContext('2d');
+            if (!ctx) {
+                console.error('Ошибка: Не удалось получить контекст канваса');
+            } else {
+                console.log('Канвас успешно инициализирован');
+            }
+
+            miniGameCanvas.width = 800;
+            miniGameCanvas.height = 600;
+
+            let score = 0;
+            let timeLeft = 60;
+            let playerX = 400 - 50;
+            const playerWidth = 100;
+            const playerHeight = 20;
+            const playerSpeed = 10;
+            const breadWidth = 30;
+            const breadHeight = 30;
+            let breadSpeed = 3;
+            let breads = [];
+            let gameRunning = false;
+            let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+            let bonusBreadChance = 0.1;
+
+            const catchSound = new Audio('https://www.myinstants.com/media/sounds/coin.mp3');
+            const bonusSound = new Audio('https://www.myinstants.com/media/sounds/powerup.mp3');
+
+            const playerImage = new Image();
+            playerImage.src = 'https://via.placeholder.com/100x20?text=Корзина';
+            playerImage.onerror = () => console.error('Ошибка загрузки изображения игрока');
+
+            const breadImage = new Image();
+            breadImage.src = 'https://via.placeholder.com/30x30?text=Сухарик';
+            breadImage.onerror = () => console.error('Ошибка загрузки изображения сухарика');
+
+            const bonusBreadImage = new Image();
+            bonusBreadImage.src = 'https://via.placeholder.com/30x30/FFD700?text=Золотий+Сухарик';
+            bonusBreadImage.onerror = () => console.error('Ошибка загрузки изображения бонусного сухарика');
+
+            function createBread() {
+                if (!gameRunning) return;
+                const isBonus = Math.random() < bonusBreadChance;
+                const bread = {
+                    x: Math.random() * (miniGameCanvas.width - breadWidth),
+                    y: -breadHeight,
+                    width: breadWidth,
+                    height: breadHeight,
+                    isBonus: isBonus,
+                    points: isBonus ? 5 : 1
+                };
+                breads.push(bread);
+            }
+
+            let breadInterval;
+            function startBreadSpawning() {
+                breadInterval = setInterval(createBread, 800);
+            }
+
+            function stopBreadSpawning() {
+                clearInterval(breadInterval);
+            }
+
+            miniGameCanvas.addEventListener('mousemove', (e) => {
+                if (!gameRunning) return;
+                const rect = miniGameCanvas.getBoundingClientRect();
+                playerX = e.clientX - rect.left - playerWidth / 2;
+                if (playerX < 0) playerX = 0;
+                if (playerX > miniGameCanvas.width - playerWidth) playerX = miniGameCanvas.width - playerWidth;
+            });
+
+            let keys = {};
+            document.addEventListener('keydown', (e) => {
+                keys[e.code] = true;
+            });
+            document.addEventListener('keyup', (e) => {
+                keys[e.code] = false;
+            });
+
+            function updatePlayer() {
+                if (!gameRunning) return;
+                if (keys['ArrowLeft'] || keys['KeyA']) {
+                    playerX -= playerSpeed;
+                    if (playerX < 0) playerX = 0;
+                }
+                if (keys['ArrowRight'] || keys['KeyD']) {
+                    playerX += playerSpeed;
+                    if (playerX > miniGameCanvas.width - playerWidth) playerX = miniGameCanvas.width - playerWidth;
+                }
+            }
+
+            function checkCollision(bread) {
+                return (
+                    bread.x + bread.width > playerX &&
+                    bread.x < playerX + playerWidth &&
+                    bread.y + bread.height > miniGameCanvas.height - playerHeight &&
+                    bread.y < miniGameCanvas.height
+                );
+            }
+
+            function updateHighScores() {
+                highScores.push(score);
+                highScores.sort((a, b) => b - a);
+                highScores = highScores.slice(0, 5);
+                localStorage.setItem('highScores', JSON.stringify(highScores));
+                const highScoreList = document.getElementById('high-score-list');
+                highScoreList.innerHTML = highScores.map((score, index) => `<li>${index + 1}. ${score}</li>`).join('');
+            }
+
+            function resetGame() {
+                score = 0;
+                timeLeft = 60;
+                breads = [];
+                playerX = 400 - 50;
+                breadSpeed = 3;
+                bonusBreadChance = 0.1;
+                gameRunning = true;
+                document.getElementById('score').textContent = score;
+                document.getElementById('time').textContent = timeLeft;
+                stopBreadSpawning();
+                startBreadSpawning();
+                console.log('Игра сброшена');
+            }
+
+            let timerInterval;
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    if (!gameRunning) return;
+                    timeLeft--;
+                    document.getElementById('time').textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        gameRunning = false;
+                        stopBreadSpawning();
+                        clearInterval(timerInterval);
+                        updateHighScores();
+                        alert(`Гра закінчена! Твій рахунок: ${score}`);
+                        console.log('Игра завершена');
+                    }
+                    if (timeLeft % 10 === 0 && breadSpeed < 6) {
+                        breadSpeed += 0.5;
+                        bonusBreadChance += 0.05;
+                    }
+                }, 1000);
+            }
+
+            const startGameBtn = document.getElementById('start-game-btn');
+            startGameBtn.addEventListener('click', () => {
+                console.log('Кнопка старта игры нажата');
+                document.querySelector('.mini-game').style.display = 'flex';
+                resetGame();
+                startTimer();
+                miniGameCanvas.focus();
+            });
+
+            function updateGame() {
+                if (!gameRunning) {
+                    ctx.clearRect(0, 0, miniGameCanvas.width, miniGameCanvas.height);
+                    ctx.fillStyle = '#ff0000';
+                    ctx.font = '30px Roboto';
+                    ctx.fillText('Натисни "Хопай Сухарі" щоб почати!', 150, miniGameCanvas.height / 2);
+                    return;
+                }
+
+                ctx.clearRect(0, 0, miniGameCanvas.width, miniGameCanvas.height);
+                updatePlayer();
+                ctx.drawImage(playerImage, playerX, miniGameCanvas.height - playerHeight, playerWidth, playerHeight);
+
+                breads = breads.filter(bread => bread.y < miniGameCanvas.height);
+                breads.forEach((bread, index) => {
+                    bread.y += breadSpeed;
+                    const image = bread.isBonus ? bonusBreadImage : breadImage;
+                    ctx.drawImage(image, bread.x, bread.y, bread.width, bread.height);
+                    if (checkCollision(bread)) {
+                        score += bread.points;
+                        document.getElementById('score').textContent = score;
+                        if (bread.isBonus) {
+                            bonusSound.play().catch(err => console.error('Ошибка звука:', err));
+                        } else {
+                            catchSound.play().catch(err => console.error('Ошибка звука:', err));
+                        }
+                        breads.splice(index, 1);
+                    }
+                });
+
+                requestAnimationFrame(updateGame);
+            }
+
+            updateHighScores();
+            updateGame();
+        });
+    </script>
+</body>
+</html>

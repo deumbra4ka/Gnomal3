@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каструля Судного Дня</title>
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cinzel', serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a0000, #4b0000, #000);
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+            animation: pulseBackground 10s ease-in-out infinite;
+        }
+
+        @keyframes pulseBackground {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.7;
+        }
+        .portal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeOutOverlay 4s ease forwards;
+        }
+        .portal {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ff0000, #4b0000, transparent);
+            border-radius: 50%;
+            box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+            animation: portalExpand 3.5s ease forwards, portalGlitch 0.3s infinite;
+            transform: scale(0);
+        }
+        @keyframes portalExpand {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(15); opacity: 1; }
+            100% { transform: scale(20); opacity: 0; }
+        }
+        @keyframes portalGlitch {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(1px, -1px); }
+            100% { transform: translate(-1px, 1px); }
+        }
+        @keyframes fadeOutOverlay {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+            animation: headerGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes headerGlow {
+            from { box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+            to { box-shadow: 0 0 40px rgba(255, 0, 0, 0.8); }
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            animation: glow 2s ease-in-out infinite alternate, shake 0.1s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000; }
+            to { text-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(2px); }
+        }
+
+        .menu-section {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .menu-section h2 {
+            font-size: 2.5em;
+            color: #ff0000;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff0000;
+            animation: flicker 1.5s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.5; }
+        }
+
+        .menu-item {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideIn 0.5s ease forwards;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+        }
+
+        @keyframes slideIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .menu-item h3 {
+            font-size: 1.8em;
+            color: #ff6666;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 5px #ff6666; }
+            to { text-shadow: 0 0 15px #ff6666; }
+        }
+
+        .menu-item p {
+            font-size: 1.1em;
+            color: #ccc;
+        }
+
+        .menu-item .text-content {
+            flex: 1;
+        }
+
+        .order-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #ff0000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: background 0.3s ease, transform 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .order-btn:hover::before {
+            left: 100%;
+        }
+
+        .order-btn:hover {
+            background: #cc0000;
+            transform: scale(1.05);
+        }
+
+        .store-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #ff0000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background 0.3s ease, transform 0.2s ease;
+            animation: pulseStoreBtn 2s ease-in-out infinite;
+        }
+
+        .store-btn:hover {
+            background: #cc0000;
+            transform: scale(1.1);
+        }
+
+        @keyframes pulseStoreBtn {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .particle {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff0000;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float 5s infinite, pulseParticle 1s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh); opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        @keyframes pulseParticle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+        }
+
+ 
+        .map-section {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .map-section h2 {
+            font-size: 2.5em;
+            color: #ff0000;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff0000;
+            animation: flicker 1.5s infinite;
+        }
+
+        .map-container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .map-container:hover {
+            transform: translateY(-10px);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+            filter: grayscale(20%) contrast(110%) brightness(90%);
+        }
+
+ 
+        .donut-container {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 150px;
+            z-index: 2;
+        }
+
+        .donut-container.left {
+            left: -150px;
+        }
+
+        .donut-container.right {
+            right: -150px;
+        }
+
+        .donut-container canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .donut-container:hover {
+            animation: glitch 0.3s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translateY(-50%) translate(0, 0); }
+            50% { transform: translateY(-50%) translate(2px, -2px); }
+            100% { transform: translateY(-50%) translate(-2px, 2px); }
+        }
+
+        @media (max-width: 768px) {
+            .map-container iframe {
+                height: 300px;
+            }
+            .map-section h2 {
+                font-size: 2em;
+            }
+            .donut-container {
+                width: 100px;
+                height: 100px;
+            }
+            .donut-container.left {
+                left: -100px;
+            }
+            .donut-container.right {
+                right: -100px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .donut-container {
+                display: none; 
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            font-size: 0.9em;
+            color: #ccc;
+            animation: footerPulse 5s ease-in-out infinite;
+        }
+
+        @keyframes footerPulse {
+            0%, 100% { background: rgba(0, 0, 0, 0.8); }
+            50% { background: rgba(20, 0, 0, 0.9); }
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.5em; }
+            .menu-section h2 { font-size: 2em; }
+            .menu-item h3 { font-size: 1.5em; }
+            .menu-item { flex-direction: column; align-items: flex-start; }
+            .particle { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <div class="portal-overlay">
+        <div class="portal"></div>
+    </div>
+
+    <header>
+        <h1>Каструля Судного Дня</h1>
+    </header>
+
+    <section class="menu-section">
+        <h2 data-aos="fade-up">🩸 Закуски ("Передсмертні Потяги")</h2>
+        <div class="menu-item" data-aos="fade-up">
+            <div class="text-content">
+                <h3>Вуха Ельфа на Грінках</h3>
+                <p>Ніжні скибочки в маринаді з крові дракона.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-content">
+                <h3>Пальці Орка по-Кобольдськи</h3>
+                <p>Злегка обгорілі, подаються з соусом "Пекельна язва".</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="text-content">
+                <h3>Мізки Гобліна в желе</h3>
+                <p>Класика темного застілля.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="text-content">
+                <h3>Слизь Слизня з хлібом</h3>
+                <p>Холодна закуска для сміливих (або без нюху).</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <h2 data-aos="fade-up">🍖 Основні страви ("Другий шанс на отруєння")</h2>
+        <div class="menu-item" data-aos="fade-up">
+            <div class="text-content">
+                <h3>Ребра Демона з Часником</h3>
+                <p>Подаються ще гарячими з Пекла.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-content">
+                <h3>Тушкований Гном в Пиві</h3>
+                <p>Фірмова страва, рецепт передається з покоління в могилу.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="text-content">
+                <h3>Курка-Некромантка</h3>
+                <p>Не гарантуємо, що не воскресне на тарілці.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="text-content">
+                <h3>Медальйони з Міньйона</h3>
+                <p>Ніжні, трохи кричать при розрізанні.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="400">
+            <div class="text-content">
+                <h3>Пельмені Зла</h3>
+                <p>Вони тебе з’їдять раніше, ніж ти їх.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <h2 data-aos="fade-up">🍷 Напої ("Зілля та Яди")</h2>
+        <div class="menu-item" data-aos="fade-up">
+            <div class="text-content">
+                <h3>Кров Діви (Безалкогольне?)</h3>
+                <p>Під питанням.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-content">
+                <h3>Гримуче Ельфійське Пиво</h3>
+                <p>98% алкоголю, 2% надії.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="text-content">
+                <h3>Відвар із Чорного Кота</h3>
+                <p>Приносить нещастя, але зігріває.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="text-content">
+                <h3>Мертва Маргарита</h3>
+                <p>Коктейль, який викликає спогади, навіть якщо ти не живий.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="400">
+            <div class="text-content">
+                <h3>Зілля Амнезії</h3>
+                <p>Забудеш, що ти це випив.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <h2 data-aos="fade-up">🦴 Десерти ("Солодка Агонія")</h2>
+        <div class="menu-item" data-aos="fade-up">
+            <div class="text-content">
+                <h3>Торт "Гріб на Могилі"</h3>
+                <p>Із справжнім ґрунтом (майже).</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-content">
+                <h3>Печиво з Кісткового Борошна</h3>
+                <p>Хрумтить і не тільки зубами.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="text-content">
+                <h3>Желе з Душі</h3>
+                <p>Смакота для морально збанкрутілих.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+        <div class="menu-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="text-content">
+                <h3>Морозиво "Крик Сирени"</h3>
+                <p>Їж швидко, поки не почало співати.</p>
+                <a href="#" class="order-btn">Замовити</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="map-section" data-aos="fade-up">
+        <h2>🗺️ Де нас знайти</h2>
+        <div class="donut-container left">
+            <canvas id="donut-left"></canvas>
+        </div>
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.2537162607837!2d25.931489062062308!3d48.2901161904094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47340899799c7c2d%3A0x9bd361a2c73ac500!2z0JPQvdC-0Lw!5e1!3m2!1sru!2spl!4v1746889565422!5m2!1sru!2spl" 
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+        <div class="donut-container right">
+            <canvas id="donut-right"></canvas>
+        </div>
+    </section>
+
+    <footer data-aos="fade-up">
+        <p>© 2025 Каструля Судного Дня. Всі страви прокляті.</p>
+        <a href="index.html" class="store-btn">Наш магазин</a>
+        <a href="index3.html" class="store-btn">Наша Печера Буйних</a>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const portalOverlay = document.querySelector('.portal-overlay');
+            setTimeout(() => {
+                portalOverlay.style.display = 'none';
+            }, 4000);
+
+            AOS.init({
+                duration: 1000,
+                offset: 200,
+                once: true
+            });
+
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.min(Math.random() * 100, 95) + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animationDuration = Math.random() * 3 + 2 + 's';
+                
+                if (Math.random() > 0.7) {
+                    particle.style.background = '#ff6666';
+                    particle.style.width = '5px';
+                    particle.style.height = '5px';
+                    particle.style.animation = 'spark 3s infinite';
+                }
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 5000);
+            }
+
+            const styleSheet = document.createElement('style');
+            styleSheet.innerText = `
+                @keyframes spark {
+                    0% { transform: translateY(100vh) scale(1); opacity: 0.7; }
+                    50% { transform: translateY(50vh) scale(1.5); opacity: 1; }
+                    100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(styleSheet);
+
+            setInterval(createParticle, 200);
+
+            document.querySelectorAll('.menu-item').forEach((item, index) => {
+                item.style.animationDelay = index * 0.1 + 's';
+            });
+
+            document.addEventListener('click', (e) => {
+                const ripple = document.createElement('div');
+                ripple.style.position = 'fixed';
+                ripple.style.left = e.clientX + 'px';
+                ripple.style.top = e.clientY + 'px';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.background = 'rgba(255, 0, 0, 0.5)';
+                ripple.style.borderRadius = '50%';
+                ripple.style.animation = 'ripple 1s ease-out';
+                document.body.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 1000);
+            });
+
+            const rippleStyle = document.createElement('style');
+            rippleStyle.innerText = `
+                @keyframes ripple {
+                    0% { transform: scale(1); opacity: 0.5; }
+                    100% { transform: scale(10); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(rippleStyle);
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xff0000,
+                emissive: 0xff3333,
+                emissiveIntensity: 0.5,
+                roughness: 0.5,
+                metalness: 0.7
+            });
+            const torus = new THREE.Mesh(geometry, material);
+            scene.add(torus);
+
+            const pointLight = new THREE.PointLight(0xff6666, 1, 100);
+            pointLight.position.set(20, 20, 20);
+            scene.add(pointLight);
+
+            const ambientLight = new THREE.AmbientLight(0x660000, 0.5);
+            scene.add(ambientLight);
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1000;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 100;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.2,
+                color: 0xff6666,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            camera.position.z = 30;
+
+            const donutScenes = [];
+            const donutRenderers = [];
+            const donutCanvases = [document.getElementById('donut-left'), document.getElementById('donut-right')];
+
+            donutCanvases.forEach((canvas, index) => {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+                renderer.setSize(150, 150);
+                renderer.setPixelRatio(window.devicePixelRatio);
+
+                const geometry = new THREE.TorusGeometry(2, 0.7, 16, 100);
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0x660000,
+                    emissive: 0xff3333,
+                    emissiveIntensity: 0.6,
+                    roughness: 0.4,
+                    metalness: 0.8
+                });
+                const donut = new THREE.Mesh(geometry, material);
+                scene.add(donut);
+
+                const pointLight = new THREE.PointLight(0xff6666, 1, 10);
+                pointLight.position.set(5, 5, 5);
+                scene.add(pointLight);
+
+                const ambientLight = new THREE.AmbientLight(0x660000, 0.5);
+                scene.add(ambientLight);
+
+                const donutParticlesGeometry = new THREE.BufferGeometry();
+                const donutParticlesCount = 100;
+                const donutPosArray = new Float32Array(donutParticlesCount * 3);
+
+                for (let i = 0; i < donutParticlesCount * 3; i++) {
+                    donutPosArray[i] = (Math.random() - 0.5) * 10;
+                }
+
+                donutParticlesGeometry.setAttribute('position', new THREE.BufferAttribute(donutPosArray, 3));
+                const donutParticlesMaterial = new THREE.PointsMaterial({
+                    size: 0.05,
+                    color: 0xff6666,
+                    transparent: true,
+                    opacity: 0.6,
+                    blending: THREE.AdditiveBlending
+                });
+                const donutParticlesMesh = new THREE.Points(donutParticlesGeometry, donutParticlesMaterial);
+                scene.add(donutParticlesMesh);
+
+                camera.position.z = 5;
+
+                donutScenes.push({ scene, camera, renderer, donut, particles: donutParticlesMesh });
+            });
+
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.01;
+
+                torus.rotation.x += 0.01;
+                torus.rotation.y += 0.01;
+                particlesMesh.rotation.y += 0.002;
+                renderer.render(scene, camera);
+
+                donutScenes.forEach(({ scene, camera, renderer, donut, particles }) => {
+                    donut.rotation.x += 0.01;
+                    donut.rotation.y += 0.01;
+                    donut.position.y = Math.sin(time) * 0.2;
+                    particles.rotation.y += 0.005;
+                    renderer.render(scene, camera);
+                });
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+
+                donutScenes.forEach(({ renderer }, index) => {
+                    const size = window.innerWidth <= 768 ? 100 : 150;
+                    renderer.setSize(size, size);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
